@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><server>
+    <featureManager>
+        <feature>jsp-2.3</feature>
+        <feature>ejbLite-3.2</feature>
+        <feature>ejbRemote-3.2</feature>
+        <feature>servlet-3.1</feature>
+        <feature>jdbc-4.2</feature>
+        <feature>jpa-2.0</feature>
+        <feature>adminCenter-1.0</feature>
+    </featureManager>
+<!-- Define an Administrator and non-Administrator -->
+   <basicRegistry id="basic">
+      <user name="admin" password="admin" />
+  <user name="tonyfieit" password="tony123" />
+   </basicRegistry>
+
+   <!-- Assign 'admin' to Administrator -->
+   <administrator-role>
+      <user>admin</user>
+   </administrator-role>
+
+<application id="onlineBanking" name="onlineBanking" type="ear" location="/config/apps/onlineBanking.ear">
+  <classloader apiTypeVisibility="spec, ibm-api, stable, third-party" commonLibraryRef="ThirdParty" />
+</application>
+
+<library id="ThirdParty" apiTypeVisibility="spec, ibm-api, stable, third-party">
+  <fileset dir="/config/lib" includes="*.jar" scanInterval="5s" />
+</library>
+
+
+    <httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
+    <library id="DB2JCCLib">
+    <fileset dir="/config/lib" includes="*.jar"/>
+   </library>
+
+   <dataSource id="db2" jndiName="jdbc/itsobank">
+    <jdbcDriver libraryRef="DB2JCCLib"/>
+    <properties.db2.jcc databaseName="ITSOBANK" serverName="10.125.0.211" portNumber="31345" user="db2admin" password="db2admin"/>
+   </dataSource>
+
+</server>

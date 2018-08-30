@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><server>
+    <featureManager>
+        <feature>jsp-2.3</feature>
+        <feature>ejbLite-3.2</feature>
+        <feature>ejbRemote-3.2</feature>
+        <feature>servlet-3.1</feature>
+        <feature>jdbc-4.2</feature>
+        <feature>jpa-2.0</feature>
+        <feature>adminCenter-1.0</feature>
+    </featureManager>
+<!-- Define an Administrator and non-Administrator -->
+   <basicRegistry id="basic">
+      <user name="admin" password="admin" />
+  <user name="tonyfieit" password="tony123" />
+   </basicRegistry>
+
+   <!-- Assign 'admin' to Administrator -->
+   <administrator-role>
+      <user>admin</user>
+   </administrator-role>
+
+<application id="bluebank-ejb-app" name="bluebank-ejb-app" type="ear" location="/config/apps/bluebank-ejb-app.ear">
+  <classloader apiTypeVisibility="spec, ibm-api, stable, third-party" commonLibraryRef="libref" />
+</application>
+
+<library id="libref" apiTypeVisibility="spec, ibm-api, stable, third-party">
+  <fileset dir="/config/lib" includes="*.jar" scanInterval="5s" />
+</library>
+
+
+    <httpEndpoint host="*" httpPort="9080" httpsPort="9443" id="defaultHttpEndpoint"/>
+
+     <jdbcDriver id="Derby_JDBC_Provider_(XA)" javax.sql.DataSource="org.apache.derby.jdbc.EmbeddedXADataSource">
+        <library>
+             <file name="${DERBY_JDBC_DRIVER_PATH}/derby.jar"/> 
+        </library>
+    </jdbcDriver>
+
+     <jdbcDriver id="Generated_Derby_JDBC_Provider" javax.sql.DataSource="org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource">
+        <library>
+            <file name="${DERBY_JDBC_DRIVER_PATH}/derby.jar"/> 
+        </library>
+    </jdbcDriver>
+
+    <dataSource id="ITSOBANKDerby" jdbcDriverRef="Generated_Derby_JDBC_Provider" jndiName="jdbc/itsobank">
+        <properties.derby.embedded databaseName="/config/data/ITSOBANK" name="ITSOBANKDerby" preTestSQLString="" statementCacheSize="0"/>
+        <connectionManager agedTimeout="1800" connectionTimeout="1800" maxIdleTime="1800" maxPoolSize="10" minPoolSize="1" reapTime="180"/>
+    </dataSource>
+    <variable name="DERBY_JDBC_DRIVER_PATH" value="/config/lib"/>
+
+</server>
